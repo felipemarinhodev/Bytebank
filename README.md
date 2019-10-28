@@ -1,6 +1,6 @@
 # bytebank
 
-A new Flutter project.
+The project for the study of Flutter. Using the course of Alura.com.br.
 
 ## Getting Started
 
