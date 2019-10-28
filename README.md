@@ -1,4 +1,4 @@
-# bytebank
+# Bytebank
 
 The project for the study of Flutter. Using the course of Alura.com.br.
 
