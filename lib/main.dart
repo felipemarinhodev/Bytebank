@@ -7,7 +7,7 @@ class BytebankApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
     home: Scaffold(
-      body: FormularioTransferencia(),
+      body: ListaTransferencia(), // FormularioTransferencia(),
     ),
   );
   }
@@ -36,7 +36,7 @@ final TextEditingController _controladorCampoValor = TextEditingController();
             icone: Icons.monetization_on
           ),
           RaisedButton(
-            onPressed: () => _criarTransferencia(),
+            onPressed: () => _criarTransferencia(context),
             child: Text('Confirmar'),
           ),
         ],
@@ -44,12 +44,14 @@ final TextEditingController _controladorCampoValor = TextEditingController();
     );
   }
 
-  void _criarTransferencia() {
+  void _criarTransferencia(BuildContext context) {
     final int _numeroConta = int.tryParse(_controladorCampoNumeroConta.text);
     final double _valor = double.tryParse(_controladorCampoValor.text);
     if(_numeroConta != null && _valor != null) {
-      final Transferencia _transferenciaCriada = Transferencia(_valor, _numeroConta);
-      debugPrint('$_transferenciaCriada');
+      final Transferencia transferenciaCriada = Transferencia(_valor, _numeroConta);
+      debugPrint('Criando transferência');
+      debugPrint('$transferenciaCriada');
+      Navigator.pop(context, transferenciaCriada);
     }
   }
 }
@@ -99,7 +101,15 @@ class ListaTransferencia extends StatelessWidget {
       ],
     ),
     floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
+          child: Icon(Icons.add), onPressed: () {
+            final Future<Transferencia> future = Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return FormularioTransferencia();
+            }));
+            future.then((transferenciaRecebida) {
+              debugPrint('chegou no then do future');
+              debugPrint('$transferenciaRecebida');
+            });
+          },
         ),
     );
   }
