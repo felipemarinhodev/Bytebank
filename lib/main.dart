@@ -13,33 +13,44 @@ class BytebankApp extends StatelessWidget {
   }
 }
       
-class FormularioTransferencia extends StatelessWidget{
+class FormularioTransferencia extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    return FormularioTransferenciaState();
+  }
+}
 
-final TextEditingController _controladorCampoNumeroConta = TextEditingController();
-final TextEditingController _controladorCampoValor = TextEditingController();
+class FormularioTransferenciaState extends State<FormularioTransferencia> {
+
+  final TextEditingController _controladorCampoNumeroConta = TextEditingController();
+  final TextEditingController _controladorCampoValor = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Formulário de transferência'),),
-      body: Column(
-        children: <Widget>[
-          Editor(
-            controlador: _controladorCampoNumeroConta,
-            rotulo: 'Número da conta',
-            dica: '0000'
-          ),
-          Editor(
-            controlador: _controladorCampoValor,
-            rotulo: 'valor',
-            dica: '0.00',
-            icone: Icons.monetization_on
-          ),
-          RaisedButton(
-            onPressed: () => _criarTransferencia(context),
-            child: Text('Confirmar'),
-          ),
-        ],
+      appBar: AppBar(
+        title: Text('Formulário de transferência'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Editor(
+              controlador: _controladorCampoNumeroConta,
+              rotulo: 'Número da conta',
+              dica: '0000'
+            ),
+            Editor(
+              controlador: _controladorCampoValor,
+              rotulo: 'valor',
+              dica: '0.00',
+              icone: Icons.monetization_on
+            ),
+            RaisedButton(
+              onPressed: () => _criarTransferencia(context),
+              child: Text('Confirmar'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -113,9 +124,15 @@ class ListaTransferenciaState extends State<ListaTransferencia> {
               return FormularioTransferencia();
             }));
             future.then((transferenciaRecebida) {
-              debugPrint('chegou no then do future');
-              debugPrint('$transferenciaRecebida');
-              widget._transferencias.add(transferenciaRecebida);
+              Future.delayed(Duration(seconds: 2), () {
+                debugPrint('chegou no then do future');
+                debugPrint('$transferenciaRecebida');
+                if (transferenciaRecebida != null) {
+                  setState(() {
+                    widget._transferencias.add(transferenciaRecebida);
+                  });
+                }
+              });
             });
           },
         ),
